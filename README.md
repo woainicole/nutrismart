@@ -4,6 +4,9 @@ Sistem Manajemen Diet, Menu Pasien & Logistik Bahan Dapur Rumah Sakit.
 
 Proyek tugas kuliah Semester 7.
 
+🌐 **Live Demo (Vercel)**: [https://nutrismart-gamma.vercel.app](https://nutrismart-gamma.vercel.app)  
+📦 **GitHub Repository**: [https://github.com/woainicole/nutrismart](https://github.com/woainicole/nutrismart)
+
 > 📖 **Panduan Lengkap Demo & Penggunaan**: Lihat file [`PANDUAN_DEMO_DAN_PENGGUNAAN.md`](./PANDUAN_DEMO_DAN_PENGGUNAAN.md) untuk detail alur operasional tiap role, skenario demo langkah demi langkah, dan katalog data dummy.
 
 ---
