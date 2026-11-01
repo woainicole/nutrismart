@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Print: sembunyikan sidebar dan topbar, tampilkan konten penuh */
+@media print {
+  nav, header, aside, [data-sidebar] {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+}
+

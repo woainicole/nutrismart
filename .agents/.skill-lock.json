@@ -1,0 +1,627 @@
+{
+  "version": 3,
+  "skills": {
+    "enhance-prompt": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/google-labs-code/stitch-skills.git",
+      "skillPath": "skills/enhance-prompt/SKILL.md",
+      "skillFolderHash": "ee608061b9209907f5f296670483884c5eb20827",
+      "installedAt": "2026-04-15T08:18:02.040Z",
+      "updatedAt": "2026-04-15T08:18:02.040Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-04-15T08:18:30.912Z",
+      "updatedAt": "2026-10-31T12:31:54.331Z"
+    },
+    "ponytail": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail/SKILL.md",
+      "skillFolderHash": "e8d3fa76e7ff9223a784dbd4bcfc9ff46b3fa55d",
+      "installedAt": "2026-10-31T12:22:23.990Z",
+      "updatedAt": "2026-10-31T12:22:23.990Z"
+    },
+    "ponytail-audit": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail-audit/SKILL.md",
+      "skillFolderHash": "0c1468092a2b011b7acd369becea098f0c17f1c0",
+      "installedAt": "2026-10-31T12:22:23.996Z",
+      "updatedAt": "2026-10-31T12:22:23.996Z"
+    },
+    "ponytail-debt": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail-debt/SKILL.md",
+      "skillFolderHash": "16c3b7953629510afa8f061f0fefa61a104e3020",
+      "installedAt": "2026-10-31T12:22:24.000Z",
+      "updatedAt": "2026-10-31T12:22:24.000Z"
+    },
+    "ponytail-gain": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail-gain/SKILL.md",
+      "skillFolderHash": "c41e9e90173ddc6844c0bc44a89ba739534e06b0",
+      "installedAt": "2026-10-31T12:22:24.005Z",
+      "updatedAt": "2026-10-31T12:22:24.005Z"
+    },
+    "ponytail-help": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail-help/SKILL.md",
+      "skillFolderHash": "f293d9e0ecff5da72cb4accf8a9e4717892cf0ad",
+      "installedAt": "2026-10-31T12:22:24.008Z",
+      "updatedAt": "2026-10-31T12:22:24.008Z"
+    },
+    "ponytail-review": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail.git",
+      "skillPath": "skills/ponytail-review/SKILL.md",
+      "skillFolderHash": "8ad8430c42a6f8cd18758dddb70cfee399725de6",
+      "installedAt": "2026-10-31T12:22:24.012Z",
+      "updatedAt": "2026-10-31T12:22:24.012Z"
+    },
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/brainstorming/SKILL.md",
+      "skillFolderHash": "3d8a23691e919f5acfd31d45f76bdc168d24ca1b",
+      "installedAt": "2026-10-31T12:23:11.593Z",
+      "updatedAt": "2026-10-31T12:23:11.593Z"
+    },
+    "diagnosing-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/diagnosing-superpowers/SKILL.md",
+      "skillFolderHash": "effb02c345170011be4470c73b99530de43182a7",
+      "installedAt": "2026-10-31T12:23:11.601Z",
+      "updatedAt": "2026-10-31T12:23:11.601Z"
+    },
+    "dispatching-parallel-agents": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/dispatching-parallel-agents/SKILL.md",
+      "skillFolderHash": "15697cb0726c26a66bff737494e8b5266667ba0c",
+      "installedAt": "2026-10-31T12:23:11.605Z",
+      "updatedAt": "2026-10-31T12:23:11.605Z"
+    },
+    "executing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/executing-plans/SKILL.md",
+      "skillFolderHash": "1374506e051a95c35f04654ebde9c5d845d7c7cb",
+      "installedAt": "2026-10-31T12:23:11.609Z",
+      "updatedAt": "2026-10-31T12:23:11.609Z"
+    },
+    "finishing-a-development-branch": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/finishing-a-development-branch/SKILL.md",
+      "skillFolderHash": "3b1205aa5038c71946077dd63b9e71b447729e70",
+      "installedAt": "2026-10-31T12:23:11.612Z",
+      "updatedAt": "2026-10-31T12:23:11.612Z"
+    },
+    "receiving-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/receiving-code-review/SKILL.md",
+      "skillFolderHash": "b5e154fc3ec7a6a0b1e710eebacc2168620cc428",
+      "installedAt": "2026-10-31T12:23:11.617Z",
+      "updatedAt": "2026-10-31T12:23:11.617Z"
+    },
+    "requesting-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/requesting-code-review/SKILL.md",
+      "skillFolderHash": "f4a6749898702895ea4fd57c7f186cf43205b99a",
+      "installedAt": "2026-10-31T12:23:11.621Z",
+      "updatedAt": "2026-10-31T12:23:11.621Z"
+    },
+    "subagent-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/subagent-driven-development/SKILL.md",
+      "skillFolderHash": "98c875856cf40765616a4565f09b437f0c58992b",
+      "installedAt": "2026-10-31T12:23:11.624Z",
+      "updatedAt": "2026-10-31T12:23:11.624Z"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "skillFolderHash": "108961c080a6837ad8a188a553e593cc5e6df62d",
+      "installedAt": "2026-10-31T12:23:11.628Z",
+      "updatedAt": "2026-10-31T12:23:11.628Z"
+    },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "skillFolderHash": "847144cf0824095922c0d4875648b9fa74877e1a",
+      "installedAt": "2026-10-31T12:23:11.633Z",
+      "updatedAt": "2026-10-31T12:23:11.633Z"
+    },
+    "using-git-worktrees": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/using-git-worktrees/SKILL.md",
+      "skillFolderHash": "d2b8357b922667a091bfe967840abf5ae84ce99c",
+      "installedAt": "2026-10-31T12:23:11.637Z",
+      "updatedAt": "2026-10-31T12:23:11.637Z"
+    },
+    "using-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/using-superpowers/SKILL.md",
+      "skillFolderHash": "4c777432715fe58984d212a36aedc6a18472e512",
+      "installedAt": "2026-10-31T12:23:11.640Z",
+      "updatedAt": "2026-10-31T12:23:11.640Z"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/verification-before-completion/SKILL.md",
+      "skillFolderHash": "a4cb0b69aaefeab540947a7f1642bdaad810e37a",
+      "installedAt": "2026-10-31T12:23:11.644Z",
+      "updatedAt": "2026-10-31T12:23:11.644Z"
+    },
+    "writing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/writing-plans/SKILL.md",
+      "skillFolderHash": "cc97fa00eb2ccd4f283e34eb2ba06a48e1e679f7",
+      "installedAt": "2026-10-31T12:23:11.649Z",
+      "updatedAt": "2026-10-31T12:23:11.649Z"
+    },
+    "writing-skills": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/writing-skills/SKILL.md",
+      "skillFolderHash": "660ede63b84ce5d07ef28cccc2973165e2ca06e2",
+      "installedAt": "2026-10-31T12:23:11.653Z",
+      "updatedAt": "2026-10-31T12:23:11.653Z"
+    },
+    "stop-slop": {
+      "source": "hardikpandya/stop-slop",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hardikpandya/stop-slop.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "8da1f030185bdfe8471220585162991eaeb970e9",
+      "installedAt": "2026-10-31T12:23:41.794Z",
+      "updatedAt": "2026-10-31T12:23:41.794Z"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/pbakaus/impeccable.git",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "skillFolderHash": "395cfad1eec5374ecb56d3b6e6c0e28deae4ccc1",
+      "installedAt": "2026-10-31T12:28:54.709Z",
+      "updatedAt": "2026-10-31T12:28:54.709Z"
+    },
+    "Agent Cost Report": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/agent-cost-report/SKILL.md",
+      "skillFolderHash": "0396a0773f264973a88dba46dbe71a25c369e53c",
+      "installedAt": "2026-10-31T12:30:49.814Z",
+      "updatedAt": "2026-10-31T12:30:49.814Z"
+    },
+    "babysit": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/babysit/SKILL.md",
+      "skillFolderHash": "b7fe9ecec0a9ee15c6964fe9b0d1489a05ae6bdb",
+      "installedAt": "2026-10-31T12:30:49.821Z",
+      "updatedAt": "2026-10-31T12:30:49.821Z"
+    },
+    "backup-setup": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/backup-setup/SKILL.md",
+      "skillFolderHash": "6f4a629129be96fa2c84923415000d549564cea7",
+      "installedAt": "2026-10-31T12:30:49.825Z",
+      "updatedAt": "2026-10-31T12:30:49.825Z"
+    },
+    "build": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/build/SKILL.md",
+      "skillFolderHash": "a93eea03abcc7b00bfa9bafd6beaeb4557332817",
+      "installedAt": "2026-10-31T12:30:49.828Z",
+      "updatedAt": "2026-10-31T12:30:49.828Z"
+    },
+    "build-and-release": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/build-and-release/SKILL.md",
+      "skillFolderHash": "f1281e09691f72a8e6b0adf99340cc02084df8d6",
+      "installedAt": "2026-10-31T12:30:49.831Z",
+      "updatedAt": "2026-10-31T12:30:49.831Z"
+    },
+    "ccs-align": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/ccs-align/SKILL.md",
+      "skillFolderHash": "8ffeb156cbe8661ed142e30e771cd53291cd1d97",
+      "installedAt": "2026-10-31T12:30:49.836Z",
+      "updatedAt": "2026-10-31T12:30:49.836Z"
+    },
+    "childhood": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/childhood/SKILL.md",
+      "skillFolderHash": "9beae3ec150ebdfc2322841bd3c4b0c9609104ed",
+      "installedAt": "2026-10-31T12:30:49.840Z",
+      "updatedAt": "2026-10-31T12:30:49.840Z"
+    },
+    "cloud-sync": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/cloud-sync/SKILL.md",
+      "skillFolderHash": "8aa52932404bb99cf64499170d50e7815fd85279",
+      "installedAt": "2026-10-31T12:30:49.843Z",
+      "updatedAt": "2026-10-31T12:30:49.843Z"
+    },
+    "design-is": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/design-is/SKILL.md",
+      "skillFolderHash": "4ab353af06cfc4bafdfe682d9055c4d91b284cb9",
+      "installedAt": "2026-10-31T12:30:49.846Z",
+      "updatedAt": "2026-10-31T12:30:49.846Z"
+    },
+    "do": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/do/SKILL.md",
+      "skillFolderHash": "406bf6e3641fb7c26dcb7e054938ff85030c208d",
+      "installedAt": "2026-10-31T12:30:49.849Z",
+      "updatedAt": "2026-10-31T12:30:49.849Z"
+    },
+    "handoff": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/handoff/SKILL.md",
+      "skillFolderHash": "e5f791a8619bd227b27692d0b3aa45714a52125b",
+      "installedAt": "2026-10-31T12:30:49.853Z",
+      "updatedAt": "2026-10-31T12:30:49.853Z"
+    },
+    "how-it-works": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/how-it-works/SKILL.md",
+      "skillFolderHash": "0258b69336228e3b7781f250b5bfbb695a49f758",
+      "installedAt": "2026-10-31T12:30:49.857Z",
+      "updatedAt": "2026-10-31T12:30:49.857Z"
+    },
+    "knowledge-agent": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/knowledge-agent/SKILL.md",
+      "skillFolderHash": "71aa3aab72daed8bcd0c89ce68e737296931e61d",
+      "installedAt": "2026-10-31T12:30:49.860Z",
+      "updatedAt": "2026-10-31T12:30:49.860Z"
+    },
+    "learn-codebase": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/learn-codebase/SKILL.md",
+      "skillFolderHash": "9cc95394cde87667b32af8d1e604b80010486c8d",
+      "installedAt": "2026-10-31T12:30:49.863Z",
+      "updatedAt": "2026-10-31T12:30:49.863Z"
+    },
+    "make-plan": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/make-plan/SKILL.md",
+      "skillFolderHash": "ca6d0637fe82a48703629d53017645dc64bb9d8c",
+      "installedAt": "2026-10-31T12:30:49.866Z",
+      "updatedAt": "2026-10-31T12:30:49.866Z"
+    },
+    "mode-creator": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/mode-creator/SKILL.md",
+      "skillFolderHash": "93311484fe83bd3c0b306d09ab3f52c6990cd397",
+      "installedAt": "2026-10-31T12:30:49.871Z",
+      "updatedAt": "2026-10-31T12:30:49.871Z"
+    },
+    "oh-my-issues": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/oh-my-issues/SKILL.md",
+      "skillFolderHash": "0fb0dc3a8fe8ba5b4f2b0ce4a9b985dfb19bb60c",
+      "installedAt": "2026-10-31T12:30:49.874Z",
+      "updatedAt": "2026-10-31T12:30:49.874Z"
+    },
+    "owner-goals": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/owner-goals/SKILL.md",
+      "skillFolderHash": "1aeca3e484465f29a4a131cecd18862ad4bd1115",
+      "installedAt": "2026-10-31T12:30:49.877Z",
+      "updatedAt": "2026-10-31T12:30:49.877Z"
+    },
+    "pathfinder": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/pathfinder/SKILL.md",
+      "skillFolderHash": "3dd4027f81e954b082b53563cc4fd33f9c79b4a9",
+      "installedAt": "2026-10-31T12:30:49.880Z",
+      "updatedAt": "2026-10-31T12:30:49.880Z"
+    },
+    "release": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/release/SKILL.md",
+      "skillFolderHash": "ea834bf3605ccc48935242d4c0b069457d74a4d0",
+      "installedAt": "2026-10-31T12:30:49.883Z",
+      "updatedAt": "2026-10-31T12:30:49.883Z"
+    },
+    "request-progress": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/request-progress/SKILL.md",
+      "skillFolderHash": "b3d8d671f6bc52f04e6f8dc6018f8ac76d06bdd8",
+      "installedAt": "2026-10-31T12:30:49.887Z",
+      "updatedAt": "2026-10-31T12:30:49.887Z"
+    },
+    "screenpipe": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/screenpipe/SKILL.md",
+      "skillFolderHash": "909ef0cc35368bc54e3f473232493805f94047e5",
+      "installedAt": "2026-10-31T12:30:49.890Z",
+      "updatedAt": "2026-10-31T12:30:49.890Z"
+    },
+    "smart-explore": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/smart-explore/SKILL.md",
+      "skillFolderHash": "5677c4996c367286108429ab4d03820a42c230f0",
+      "installedAt": "2026-10-31T12:30:49.893Z",
+      "updatedAt": "2026-10-31T12:30:49.893Z"
+    },
+    "standup": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/standup/SKILL.md",
+      "skillFolderHash": "7ee7765c39495bde343a98c00de9bdfa555f192b",
+      "installedAt": "2026-10-31T12:30:49.896Z",
+      "updatedAt": "2026-10-31T12:30:49.896Z"
+    },
+    "timeline-report": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/timeline-report/SKILL.md",
+      "skillFolderHash": "133c8136cae3f319fd908ecd22c0a2a330c7271a",
+      "installedAt": "2026-10-31T12:30:49.899Z",
+      "updatedAt": "2026-10-31T12:30:49.899Z"
+    },
+    "version-bump": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/version-bump/SKILL.md",
+      "skillFolderHash": "6c724fb3c9fd5f17ca661ef2eaafca71c30b43b4",
+      "installedAt": "2026-10-31T12:30:49.904Z",
+      "updatedAt": "2026-10-31T12:30:49.904Z"
+    },
+    "weekly-digests": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/weekly-digests/SKILL.md",
+      "skillFolderHash": "fbd8328e8d7d21659e396aa8992813b1c7226d02",
+      "installedAt": "2026-10-31T12:30:49.907Z",
+      "updatedAt": "2026-10-31T12:30:49.907Z"
+    },
+    "what-the": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/what-the/SKILL.md",
+      "skillFolderHash": "96d5358ef562881b0a667c6dfc4538baf96efd0d",
+      "installedAt": "2026-10-31T12:30:49.911Z",
+      "updatedAt": "2026-10-31T12:30:49.911Z"
+    },
+    "wowerpoint": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "plugin/skills/wowerpoint/SKILL.md",
+      "skillFolderHash": "9413cb9440b58576bdffa0b19180c28f67e890d3",
+      "installedAt": "2026-10-31T12:30:49.915Z",
+      "updatedAt": "2026-10-31T12:30:49.915Z"
+    },
+    "mem-search": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "cowork/skills/mem-search/SKILL.md",
+      "skillFolderHash": "df092f1e774314150873b516fc499abfcce61f83",
+      "installedAt": "2026-10-31T12:30:49.919Z",
+      "updatedAt": "2026-10-31T12:30:49.919Z"
+    },
+    "mem-setup": {
+      "source": "thedotmack/claude-mem",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thedotmack/claude-mem.git",
+      "skillPath": "cowork/skills/mem-setup/SKILL.md",
+      "skillFolderHash": "9d65dcd424a1b7959c624422623e30f3d71909db",
+      "installedAt": "2026-10-31T12:30:49.923Z",
+      "updatedAt": "2026-10-31T12:30:49.923Z"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "skillFolderHash": "bf90d0a4b83ea054653350f9c67f6de235d3a368",
+      "installedAt": "2026-10-31T12:31:28.562Z",
+      "updatedAt": "2026-10-31T12:31:28.562Z"
+    },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/deploy-to-vercel/SKILL.md",
+      "skillFolderHash": "772d5a08126c09869c642416c824cfdeeb4104b3",
+      "installedAt": "2026-10-31T12:31:28.567Z",
+      "updatedAt": "2026-10-31T12:31:28.567Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "343db72180d05814949fef7d46be96b5c6ee86b3",
+      "installedAt": "2026-10-31T12:31:28.572Z",
+      "updatedAt": "2026-10-31T12:31:28.572Z"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-native-skills/SKILL.md",
+      "skillFolderHash": "8b4c6a51914e2111ab6f4f00cb81778652aa241d",
+      "installedAt": "2026-10-31T12:31:28.576Z",
+      "updatedAt": "2026-10-31T12:31:28.576Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "skillFolderHash": "b490379f71eee822cf207605ce4fceaff6e10330",
+      "installedAt": "2026-10-31T12:31:28.579Z",
+      "updatedAt": "2026-10-31T12:31:28.579Z"
+    },
+    "vercel-cli-with-tokens": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-cli-with-tokens/SKILL.md",
+      "skillFolderHash": "279c8760375cb6a47a4a8a312b652b0745c6d776",
+      "installedAt": "2026-10-31T12:31:28.582Z",
+      "updatedAt": "2026-10-31T12:31:28.582Z"
+    },
+    "vercel-optimize": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-optimize/SKILL.md",
+      "skillFolderHash": "0901aa3667db7a6e5cc40b213327290bf6556373",
+      "installedAt": "2026-10-31T12:31:28.587Z",
+      "updatedAt": "2026-10-31T12:31:28.587Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "installedAt": "2026-10-31T12:31:28.591Z",
+      "updatedAt": "2026-10-31T12:31:28.591Z"
+    },
+    "writing-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/writing-guidelines/SKILL.md",
+      "skillFolderHash": "17d954cadfb8dec50bf0c707c9e7634be9ae9fe8",
+      "installedAt": "2026-10-31T12:31:28.594Z",
+      "updatedAt": "2026-10-31T12:31:28.594Z"
+    },
+    "task-observer": {
+      "source": "rebelytics/one-skill-to-rule-them-all",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rebelytics/one-skill-to-rule-them-all.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "ba696b2c2673be959dcd4a1dbdbc92085df8b41a",
+      "installedAt": "2026-10-31T12:32:44.009Z",
+      "updatedAt": "2026-10-31T12:32:44.009Z"
+    },
+    "graphify": {
+      "source": "safishamsi/graphify",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/safishamsi/graphify.git",
+      "skillPath": "graphify/SKILL.md",
+      "skillFolderHash": "aff7c2078bfd379aace98d4dc4d730a125d0ed2a",
+      "installedAt": "2026-10-31T12:33:49.809Z",
+      "updatedAt": "2026-10-31T12:33:49.809Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "dexto",
+    "firebender",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode",
+    "warp",
+    "openclaw"
+  ]
+}
