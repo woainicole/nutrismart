@@ -1,0 +1,40 @@
+name: Supabase Keep Alive Heartbeat
+
+on:
+  schedule:
+    # Berjalan setiap hari pada pukul 00:00 UTC (07:00 WIB)
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Memungkinkan trigger manual dari tab Actions di GitHub
+
+jobs:
+  heartbeat:
+    name: Ping Supabase REST API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase keep_alive Endpoint
+        run: |
+          URL="${{ secrets.VITE_SUPABASE_URL || 'https://wkiiposeoztrdlpuzznh.supabase.co' }}"
+          APIKEY="${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndraWlwb3Nlb3p0cmRscHV6em5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NDcyMzYsImV4cCI6MjEwOTAyMzIzNn0.ja_XQA6EZZ10LmzNA8PUnEAx3pjILyu_ChjDSFzQC8w' }}"
+
+          # Coba endpoint keep_alive terlebih dahulu, fallback ke bangsal jika tabel belum ada
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $APIKEY" \
+            -H "Authorization: Bearer $APIKEY" \
+            "$URL/rest/v1/keep_alive?select=id&limit=1")
+          
+          if [ "$STATUS_CODE" -eq 404 ]; then
+            echo "Endpoint keep_alive belum ada (404), mencoba endpoint fallback /rest/v1/bangsal..."
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "apikey: $APIKEY" \
+              -H "Authorization: Bearer $APIKEY" \
+              "$URL/rest/v1/bangsal?select=id&limit=1")
+          fi
+          
+          echo "Supabase Response HTTP Code: $STATUS_CODE"
+          if [ "$STATUS_CODE" -ge 200 ] && [ "$STATUS_CODE" -lt 400 ]; then
+            echo "Heartbeat berhasil! Database Supabase aktif."
+            exit 0
+          else
+            echo "Peringatan: Response code $STATUS_CODE"
+            exit 1
+          fi

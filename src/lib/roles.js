@@ -32,8 +32,11 @@ export const MENU_ITEMS = [
   { path: '/pengajuan-diet', label: 'Pengajuan Diet', icon: 'FileText', allow: ['admin','ahli_gizi','perawat'] },
   { path: '/pengajuan-pembelian', label: 'Pengajuan Pembelian', icon: 'ShoppingCart', allow: ['admin','koki','gudang'] },
   { path: '/pengembalian', label: 'Pengembalian', icon: 'RotateCcw', allow: ['admin','ahli_gizi','koki','perawat'] },
+  { path: '/riwayat-makan', label: 'Riwayat Makan', icon: 'ClipboardCheck', allow: ['admin','ahli_gizi','perawat'] },
   { path: '/laporan', label: 'Laporan', icon: 'FileBarChart', allow: ['admin','ahli_gizi','koki','gudang'] },
   { path: '/grafik', label: 'Grafik', icon: 'BarChart3', allow: ['admin','ahli_gizi','koki','gudang'] },
+  { path: '/notifikasi', label: 'Notifikasi', icon: 'Bell', allow: ['admin','ahli_gizi','koki','perawat','gudang'] },
+  { path: '/log-aktivitas', label: 'Log Aktivitas', icon: 'Activity', allow: ['admin'] },
   { path: '/pengaturan', label: 'Pengaturan', icon: 'Settings', allow: ['admin'] },
   { path: '/profil', label: 'Profil', icon: 'UserCircle', allow: ['admin','ahli_gizi','koki','perawat','gudang'] },
 ]
@@ -47,6 +50,7 @@ export const VIEW_ONLY = {
   '/stok': ['ahli_gizi', 'koki'],
   '/menu-harian': ['koki'],
   '/pesanan': ['perawat'],
+  '/riwayat-makan': ['perawat'],
 }
 
 // Cek apakah role boleh mengakses path

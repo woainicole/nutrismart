@@ -1,11 +1,22 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useNotifikasi } from '../../context/NotifikasiContext'
 import { MENU_ITEMS, ROLE_LABEL } from '../../lib/roles'
 import * as Icons from 'lucide-react'
+import { useEffect } from 'react'
 
 export default function Sidebar({ open, onClose }) {
   const { profile, role } = useAuth()
+  const { perRute, tandaiRute } = useNotifikasi()
+  const location = useLocation()
   const filtered = MENU_ITEMS.filter(m => m.allow.includes(role))
+
+  // Tandai notif dibaca saat route berubah
+  useEffect(() => {
+    if (perRute[location.pathname]) {
+      tandaiRute(location.pathname)
+    }
+  }, [location.pathname])
 
   return (
     <>
@@ -29,6 +40,7 @@ export default function Sidebar({ open, onClose }) {
         <nav className="flex-1 overflow-y-auto py-2">
           {filtered.map(item => {
             const Icon = Icons[item.icon] || Icons.Circle
+            const badge = perRute[item.path] || 0
             return (
               <NavLink
                 key={item.path}
@@ -43,7 +55,12 @@ export default function Sidebar({ open, onClose }) {
                 }
               >
                 <Icon size={18} />
-                {item.label}
+                <span className="flex-1">{item.label}</span>
+                {badge > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 font-bold">
+                    {badge > 99 ? '99+' : badge}
+                  </span>
+                )}
               </NavLink>
             )
           })}

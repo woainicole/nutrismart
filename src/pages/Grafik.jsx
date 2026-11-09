@@ -4,6 +4,8 @@ import { hariIni } from '../lib/format'
 import PageHeader from '../components/ui/PageHeader'
 import Button from '../components/ui/Button'
 import Spinner from '../components/ui/Spinner'
+import DataTable from '../components/ui/DataTable'
+import Badge from '../components/ui/Badge'
 import toast from 'react-hot-toast'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement } from 'chart.js'
 import { Doughnut, Bar, Line } from 'react-chartjs-2'
@@ -18,12 +20,14 @@ export default function Grafik() {
   const [tglSelesai, setTglSelesai] = useState(hariIni())
   const [chartData, setChartData] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [evaluasiData, setEvaluasiData] = useState([])
 
   async function load() {
     setLoading(true)
     try {
       if (tab === 'foodwaste') await loadFoodWaste()
       else if (tab === 'diet') await loadDiet()
+      else if (tab === 'evaluasi') await loadEvaluasi()
       else await loadBahan()
     } catch (e) { toast.error(e.message) }
     finally { setLoading(false) }
@@ -79,10 +83,54 @@ export default function Grafik() {
     })
   }
 
+  async function loadEvaluasi() {
+    const { data, error } = await supabase
+      .from('v_food_waste')
+      .select('menu, persen_sisa, alasan')
+      .gte('tanggal', tglMulai)
+      .lte('tanggal', tglSelesai)
+    if (error) throw error
+    // Grup per menu
+    const grouped = {}
+    for (const r of data) {
+      if (!grouped[r.menu]) grouped[r.menu] = { total: 0, sisa: [], alasan: {} }
+      grouped[r.menu].total++
+      grouped[r.menu].sisa.push(r.persen_sisa || 0)
+      if (r.alasan) grouped[r.menu].alasan[r.alasan] = (grouped[r.menu].alasan[r.alasan] || 0) + 1
+    }
+    const rows = Object.entries(grouped).map(([menu, v]) => ({
+      menu,
+      jumlah: v.total,
+      avg_sisa: Math.round(v.sisa.reduce((a, b) => a + b, 0) / v.sisa.length),
+      alasan_top: Object.entries(v.alasan).sort((a, b) => b[1] - a[1])[0]?.[0] || '—',
+      perlu_evaluasi: v.total >= 5 && Math.round(v.sisa.reduce((a, b) => a + b, 0) / v.sisa.length) >= 40,
+    })).sort((a, b) => b.avg_sisa - a.avg_sisa)
+    setEvaluasiData(rows)
+    // Set chart: top 10 horizontal bar
+    const top10 = rows.slice(0, 10)
+    setChartData({
+      labels: top10.map(r => r.menu),
+      datasets: [{ label: 'Rata-rata % Sisa', data: top10.map(r => r.avg_sisa), backgroundColor: '#dc2626' }],
+    })
+  }
+
   const tabs = [
     { key: 'foodwaste', label: 'Tren Food Waste' },
     { key: 'diet', label: 'Distribusi Diet' },
     { key: 'bahan', label: 'Konsumsi Bahan' },
+    { key: 'evaluasi', label: 'Evaluasi Menu' },
+  ]
+
+  const colEvaluasi = [
+    { key: 'menu', label: 'Menu' },
+    { key: 'jumlah', label: 'Jumlah Catatan' },
+    { key: 'avg_sisa', label: 'Rata-rata Sisa (%)' },
+    { key: 'alasan_top', label: 'Alasan Utama' },
+    { key: 'status', label: 'Status', render: row =>
+      row.perlu_evaluasi
+        ? <Badge color="habis">Perlu Dievaluasi</Badge>
+        : <Badge color="aman">Normal</Badge>
+    },
   ]
 
   return (
@@ -91,7 +139,7 @@ export default function Grafik() {
 
       <div className="flex flex-wrap gap-2 mb-4">
         {tabs.map(t => (
-          <button key={t.key} onClick={() => { setTab(t.key); setChartData(null) }}
+          <button key={t.key} onClick={() => { setTab(t.key); setChartData(null); setEvaluasiData([]) }}
             className={`px-4 py-2 text-sm rounded-lg font-medium ${tab === t.key ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
             {t.label}
           </button>
@@ -112,14 +160,27 @@ export default function Grafik() {
         {loading ? <div className="flex justify-center py-12"><Spinner /></div> : !chartData ? (
           <p className="text-center text-gray-400 py-12">Klik Tampilkan untuk memuat grafik</p>
         ) : (
-          <div className="max-w-2xl mx-auto">
-            {tab === 'foodwaste' && <Line data={chartData} options={{ responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }} />}
-            {tab === 'diet' && <Doughnut data={chartData} options={{ responsive: true }} />}
-            {tab === 'bahan' && <Bar data={chartData} options={{ responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }} />}
-          </div>
+          <>
+            <div className="max-w-2xl mx-auto">
+              {tab === 'foodwaste' && <Line data={chartData} options={{ responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }} />}
+              {tab === 'diet' && <Doughnut data={chartData} options={{ responsive: true }} />}
+              {tab === 'bahan' && <Bar data={chartData} options={{ responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }} />}
+              {tab === 'evaluasi' && <Bar data={chartData} options={{ responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, max: 100 } } }} />}
+            </div>
+
+            {tab === 'evaluasi' && evaluasiData.length > 0 && (
+              <div className="mt-6">
+                <DataTable
+                  columns={colEvaluasi}
+                  data={evaluasiData}
+                  searchKeys={['menu']}
+                  pageSize={25}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   )
 }
-

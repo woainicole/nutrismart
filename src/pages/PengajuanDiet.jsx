@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { getPengajuanDiet, createPengajuanDiet, setujuiDiet, tolakDiet } from '../services/pengajuanService'
+import { getPengajuanDiet, createPengajuanDiet, setujuiDiet, batalkanPengajuanDiet, tolakDietDenganAlasan } from '../services/pengajuanService'
 import { getPasien } from '../services/pasienService'
 import { getJenisDiet } from '../services/dietService'
 import { formatTanggal } from '../lib/format'
@@ -23,6 +23,7 @@ export default function PengajuanDiet() {
   const [form, setForm] = useState({ pasien_id: '', diet_baru_id: '', tanggal_berlaku: '', waktu_makan: 'pagi', alasan: '' })
   const [saving, setSaving] = useState(false)
   const [filterStatus, setFilterStatus] = useState('')
+  const [modalTolak, setModalTolak] = useState({ open: false, id: null, alasan: '' })
 
   const isPerawat = role === 'perawat'
   const canApprove = ['admin', 'ahli_gizi'].includes(role)
@@ -45,7 +46,6 @@ export default function PengajuanDiet() {
   }
 
   function openAdd() {
-    // Perawat: filter pasien berdasarkan bangsal_id profil
     setForm({ pasien_id: '', diet_baru_id: '', tanggal_berlaku: '', waktu_makan: 'pagi', alasan: '' })
     setModalOpen(true)
   }
@@ -79,10 +79,24 @@ export default function PengajuanDiet() {
     } catch (e) { toast.error(e.message) }
   }
 
-  async function handleTolak(id) {
+  async function handleBatalkan(id) {
     try {
-      await tolakDiet(id)
+      await batalkanPengajuanDiet(id)
+      toast.success('Pengajuan dibatalkan')
+      await load()
+    } catch (e) { toast.error(e.message) }
+  }
+
+  async function handleTolakSubmit(e) {
+    e.preventDefault()
+    if (!modalTolak.alasan.trim()) {
+      toast.error('Alasan penolakan wajib diisi')
+      return
+    }
+    try {
+      await tolakDietDenganAlasan(modalTolak.id, modalTolak.alasan)
       toast.success('Pengajuan ditolak')
+      setModalTolak({ open: false, id: null, alasan: '' })
       await load()
     } catch (e) { toast.error(e.message) }
   }
@@ -91,6 +105,11 @@ export default function PengajuanDiet() {
   const filteredPasien = isPerawat && profile.bangsal_id
     ? pasienList.filter(p => p.bangsal_id === profile.bangsal_id)
     : pasienList
+
+  // Perawat hanya lihat bangsal sendiri di tabel
+  const tampilData = isPerawat && profile?.bangsal_id
+    ? data.filter(r => r.pasien?.bangsal_id === profile.bangsal_id)
+    : data
 
   const columns = [
     { key: 'pasien', label: 'Pasien', render: r => `${r.pasien?.nama} (${r.pasien?.no_rm})` },
@@ -101,7 +120,37 @@ export default function PengajuanDiet() {
     { key: 'alasan', label: 'Alasan' },
     { key: 'pengaju', label: 'Diajukan', render: r => r.pengaju?.nama ?? '-' },
     { key: 'status', label: 'Status', render: r => <Badge color={r.status}>{r.status}</Badge> },
+    { key: 'alasan_penolakan', label: 'Alasan Tolak', render: r => r.alasan_penolakan ?? '—' },
   ]
+
+  function renderActions(row) {
+    const actions = []
+
+    // Ahli gizi / admin: setujui & tolak pengajuan menunggu
+    if (canApprove && row.status === 'menunggu') {
+      actions.push(
+        <Button key="setujui" size="sm" variant="ghost" onClick={() => handleSetujui(row.id)} title="Setujui">
+          <Check size={14} className="text-green-600" />
+        </Button>
+      )
+      actions.push(
+        <Button key="tolak" size="sm" variant="ghost" onClick={() => setModalTolak({ open: true, id: row.id, alasan: '' })} title="Tolak">
+          <X size={14} className="text-red-600" />
+        </Button>
+      )
+    }
+
+    // Perawat: batalkan pengajuan miliknya yang masih menunggu
+    if (isPerawat && row.status === 'menunggu' && row.diajukan_oleh === profile?.id) {
+      actions.push(
+        <Button key="batalkan" size="sm" variant="ghost" onClick={() => handleBatalkan(row.id)} title="Batalkan">
+          <X size={14} className="text-red-500" />
+        </Button>
+      )
+    }
+
+    return actions.length > 0 ? <>{actions}</> : null
+  }
 
   return (
     <div>
@@ -113,21 +162,22 @@ export default function PengajuanDiet() {
           <option value="menunggu">Menunggu</option>
           <option value="disetujui">Disetujui</option>
           <option value="ditolak">Ditolak</option>
+          <option value="dibatalkan">Dibatalkan</option>
         </select>
       </div>
 
-      <DataTable columns={columns} data={data} loading={loading} searchKeys={['pasien.nama', 'alasan']}
-        actions={canApprove ? row => {
-          if (row.status !== 'menunggu') return null
-          return (
-            <>
-              <Button size="sm" variant="ghost" onClick={() => handleSetujui(row.id)} title="Setujui"><Check size={14} className="text-green-600" /></Button>
-              <Button size="sm" variant="ghost" onClick={() => handleTolak(row.id)} title="Tolak"><X size={14} className="text-red-600" /></Button>
-            </>
-          )
-        } : null}
+      <DataTable columns={columns} data={tampilData} loading={loading} searchKeys={[
+          row => row.pasien?.nama ?? '',
+          row => row.pasien?.no_rm ?? '',
+          row => row.diet_lama?.nama ?? '',
+          row => row.diet_baru?.nama ?? '',
+          'alasan', 'status',
+          row => row.pengaju?.nama ?? ''
+        ]}
+        actions={row => renderActions(row)}
       />
 
+      {/* Modal buat pengajuan */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Buat Pengajuan Ubah Diet">
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormField label="Pasien" required>
@@ -163,7 +213,26 @@ export default function PengajuanDiet() {
           </div>
         </form>
       </Modal>
+
+      {/* Modal tolak dengan alasan */}
+      <Modal open={modalTolak.open} onClose={() => setModalTolak({ open: false, id: null, alasan: '' })} title="Tolak Pengajuan Diet">
+        <form onSubmit={handleTolakSubmit} className="space-y-4">
+          <FormField label="Alasan Penolakan" required>
+            <textarea
+              value={modalTolak.alasan}
+              onChange={e => setModalTolak(m => ({ ...m, alasan: e.target.value }))}
+              required
+              rows={3}
+              placeholder="Tuliskan alasan penolakan..."
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            />
+          </FormField>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="secondary" type="button" onClick={() => setModalTolak({ open: false, id: null, alasan: '' })}>Batal</Button>
+            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">Konfirmasi Tolak</Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }
-

@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabaseClient'
 export async function getPengajuanDiet(filter = {}) {
   let q = supabase
     .from('pengajuan_diet')
-    .select('*, pasien:pasien(nama, no_rm), diet_lama:jenis_diet!diet_lama_id(nama), diet_baru:jenis_diet!diet_baru_id(nama), pengaju:profiles!diajukan_oleh(nama), penyetuju:profiles!disetujui_oleh(nama)')
+    .select('*, pasien:pasien(nama, no_rm, bangsal_id), diet_lama:jenis_diet!diet_lama_id(nama), diet_baru:jenis_diet!diet_baru_id(nama), pengaju:profiles!diajukan_oleh(nama), penyetuju:profiles!disetujui_oleh(nama)')
     .order('created_at', { ascending: false })
   if (filter.status) q = q.eq('status', filter.status)
   const { data, error } = await q
@@ -33,6 +33,23 @@ export async function tolakDiet(id) {
     .single()
   if (error) throw error
   return data
+}
+
+export async function batalkanPengajuanDiet(id) {
+  const { error } = await supabase
+    .from('pengajuan_diet')
+    .update({ status: 'dibatalkan' })
+    .eq('id', id)
+    .eq('status', 'menunggu')
+  if (error) throw error
+}
+
+export async function tolakDietDenganAlasan(id, alasan_penolakan) {
+  const { error } = await supabase
+    .from('pengajuan_diet')
+    .update({ status: 'ditolak', alasan_penolakan })
+    .eq('id', id)
+  if (error) throw error
 }
 
 // ===== PENGAJUAN PEMBELIAN (T-19) =====

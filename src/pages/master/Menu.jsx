@@ -175,8 +175,9 @@ export default function Menu() {
               </select>
             </FormField>
           </div>
-          <FormField label="Alergen (pisah koma)">
+          <FormField label="Alergen tambahan (pisah koma)">
             <input value={form.mengandung_alergen} onChange={e => setForm(f => ({ ...f, mengandung_alergen: e.target.value }))} placeholder="kacang, udang" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+            <p className="text-xs text-gray-400 mt-1">Alergen dari bahan resep terdeteksi otomatis. Field ini untuk tag tambahan saja.</p>
           </FormField>
 
           {/* Diet multi-select */}

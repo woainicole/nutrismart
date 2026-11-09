@@ -94,7 +94,13 @@ export default function Pengembalian() {
         </div>
       </div>
 
-      <DataTable columns={columns} data={data} loading={loading} emptyMessage="Belum ada catatan pengembalian" />
+      <DataTable columns={columns} data={data} loading={loading} emptyMessage="Belum ada catatan pengembalian"
+        searchKeys={[
+          row => row.pesanan?.pasien?.nama ?? '',
+          row => row.pesanan?.pasien?.bangsal?.nama ?? '',
+          row => row.pesanan?.menu?.nama ?? '',
+          'alasan'
+        ]} />
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Catat Pengembalian Makanan">
         <form onSubmit={handleSubmit} className="space-y-4">

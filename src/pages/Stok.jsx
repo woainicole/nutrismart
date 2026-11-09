@@ -5,12 +5,14 @@ import { useLocation } from 'react-router-dom'
 import { getStokBahan, getStokBatch, createStokBatch } from '../services/stokService'
 import { getBahan } from '../services/bahanService'
 import { formatTanggal } from '../lib/format'
+import { supabase } from '../lib/supabaseClient'
 import DataTable from '../components/ui/DataTable'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import FormField from '../components/ui/FormField'
 import PageHeader from '../components/ui/PageHeader'
+import Spinner from '../components/ui/Spinner'
 import toast from 'react-hot-toast'
 import { Plus } from 'lucide-react'
 
@@ -25,6 +27,15 @@ export default function Stok() {
   const [modalOpen, setModalOpen] = useState(false)
   const [form, setForm] = useState({ bahan_id: '', jumlah_sisa: '', tgl_kedaluwarsa: '' })
 
+  // Kebutuhan tab state
+  const [kebutuhanData, setKebutuhanData] = useState([])
+  const [tglKebutuhan, setTglKebutuhan] = useState(() => {
+    const d = new Date()
+    d.setDate(d.getDate() + 1)
+    return d.toISOString().slice(0, 10)
+  })
+  const [loadingKebutuhan, setLoadingKebutuhan] = useState(false)
+
   useEffect(() => { load() }, [])
 
   async function load() {
@@ -35,6 +46,27 @@ export default function Stok() {
       setBahanList(bl)
     } catch (e) { toast.error(e.message) }
     finally { setLoading(false) }
+  }
+
+  async function loadKebutuhan() {
+    setLoadingKebutuhan(true)
+    try {
+      const { data, error } = await supabase.rpc('kebutuhan_bahan', { p_tanggal: tglKebutuhan })
+      if (error) throw error
+      setKebutuhanData(data || [])
+    } catch (e) { toast.error(e.message) }
+    finally { setLoadingKebutuhan(false) }
+  }
+
+  async function handleBuang(id) {
+    if (!confirm('Yakin ingin membuang batch ini? Jumlah sisa akan dikurangi menjadi 0.')) return
+    try {
+      const { error } = await supabase.from('stok_batch').update({ jumlah_sisa: 0 }).eq('id', id)
+      if (error) throw error
+      toast.success('Batch dibuang')
+      setLoading(true)
+      await load()
+    } catch (e) { toast.error(e.message) }
   }
 
   async function handleSubmit(e) {
@@ -81,6 +113,30 @@ export default function Stok() {
         </span>
       )
     }},
+    ...(!viewOnly ? [{ key: 'aksi', label: '', render: r => {
+      const today = new Date().toISOString().slice(0, 10)
+      return r.tgl_kedaluwarsa < today && r.jumlah_sisa > 0
+        ? <button onClick={() => handleBuang(r.id)} className="text-xs text-red-600 hover:underline font-medium">Buang</button>
+        : null
+    }}] : []),
+  ]
+
+  const colKebutuhan = [
+    { key: 'nama_bahan', label: 'Bahan' },
+    { key: 'satuan', label: 'Satuan' },
+    { key: 'kebutuhan', label: 'Kebutuhan' },
+    { key: 'stok', label: 'Stok' },
+    { key: 'kekurangan', label: 'Kekurangan', render: row =>
+      row.kekurangan > 0
+        ? <span className="font-semibold text-red-600">{row.kekurangan}</span>
+        : <span className="text-gray-400">—</span>
+    },
+  ]
+
+  const tabDefs = [
+    { key: 'ringkasan', label: 'Ringkasan Stok' },
+    { key: 'batch', label: 'Batch FEFO' },
+    { key: 'kebutuhan', label: 'Proyeksi Kebutuhan' },
   ]
 
   return (
@@ -95,23 +151,58 @@ export default function Stok() {
 
       {/* Tab */}
       <div className="flex gap-2 mb-4">
-        {['ringkasan', 'batch'].map(t => (
+        {tabDefs.map(t => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
+            key={t.key}
+            onClick={() => setTab(t.key)}
             className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
-              tab === t ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              tab === t.key ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            {t === 'ringkasan' ? 'Ringkasan Stok' : 'Batch FEFO'}
+            {t.label}
           </button>
         ))}
       </div>
 
-      {tab === 'ringkasan' ? (
+      {tab === 'ringkasan' && (
         <DataTable columns={colRingkasan} data={stokBahan} loading={loading} searchKeys={['nama']} />
-      ) : (
+      )}
+
+      {tab === 'batch' && (
         <DataTable columns={colBatch} data={batches} loading={loading} searchKeys={['bahan.nama']} />
+      )}
+
+      {tab === 'kebutuhan' && (
+        <>
+          <div className="mb-4 flex items-center gap-3">
+            <label className="text-sm text-gray-600">Tanggal</label>
+            <input
+              type="date"
+              value={tglKebutuhan}
+              onChange={e => setTglKebutuhan(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            />
+            <Button onClick={loadKebutuhan}>Tampilkan</Button>
+          </div>
+          {loadingKebutuhan ? (
+            <div className="flex justify-center py-8"><Spinner /></div>
+          ) : (
+            <>
+              {kebutuhanData.some(r => r.kekurangan > 0) && (
+                <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  ⚠️ Ada {kebutuhanData.filter(r => r.kekurangan > 0).length} bahan dengan stok kurang
+                </div>
+              )}
+              <p className="text-xs text-gray-400 mb-2 italic">Perkiraan — belum menghitung pesanan konflik alergi</p>
+              <DataTable
+                columns={colKebutuhan}
+                data={kebutuhanData}
+                searchKeys={['nama_bahan']}
+                pageSize={25}
+              />
+            </>
+          )}
+        </>
       )}
 
       {/* Modal barang masuk */}
@@ -157,4 +248,3 @@ export default function Stok() {
     </div>
   )
 }
-

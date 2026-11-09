@@ -34,6 +34,24 @@ export async function updateStatusPesanan(id, status) {
   return data
 }
 
+export async function getSesiMakan(tanggal) {
+  const { data, error } = await supabase
+    .from('sesi_makan')
+    .select('tanggal, waktu_makan, disiapkan_at, disiapkan_oleh')
+    .eq('tanggal', tanggal)
+  if (error) throw new Error(error.message)
+  // Kembalikan sebagai map { pagi: {...}, siang: {...}, malam: {...} }
+  const map = {}
+  ;(data || []).forEach(s => { map[s.waktu_makan] = s })
+  return map
+}
+
+export async function ubahStatusMassal(ids, status) {
+  const { data, error } = await supabase.rpc('ubah_status_pesanan', { p_ids: ids, p_status: status })
+  if (error) throw error
+  return data // { diubah, dilewati }
+}
+
 export async function updateMenuPesanan(id, menuId) {
   const { data, error } = await supabase
     .from('pesanan_makan')

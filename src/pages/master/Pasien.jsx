@@ -158,7 +158,17 @@ export default function Pasien() {
             <input value={form.diagnosa} onChange={e => setForm(f => ({ ...f, diagnosa: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
           </FormField>
           <FormField label="Alergi (pisahkan koma, mis: kacang, udang)">
-            <input value={form.alergi} onChange={e => setForm(f => ({ ...f, alergi: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="kacang, udang" />
+            <input
+              value={form.alergi}
+              onChange={e => setForm(f => ({ ...f, alergi: e.target.value }))}
+              list="saran-alergen-pasien"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              placeholder="kacang, udang"
+            />
+            <datalist id="saran-alergen-pasien">
+              {['kacang','udang','telur','susu','ikan','ayam','gluten','kedelai'].map(s => <option key={s} value={s} />)}
+            </datalist>
+            <p className="text-xs text-gray-400 mt-1">Alergi dicocokkan dengan nama menu, nama bahan, dan tag alergen.</p>
           </FormField>
           <div className="grid grid-cols-2 gap-4">
             <FormField label="Jenis Diet">

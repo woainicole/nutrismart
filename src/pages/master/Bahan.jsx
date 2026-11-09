@@ -23,7 +23,9 @@ export default function Bahan() {
   // Modal state
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [formBahan, setFormBahan] = useState({ nama: '', satuan: '', stok_minimum: 0, supplier_id: '' })
+  const [formBahan, setFormBahan] = useState({ nama: '', satuan: '', stok_minimum: 0, supplier_id: '', alergen: [] })
+  const [alergenInput, setAlergenInput] = useState('')
+  const SARAN_ALERGEN = ['kacang', 'udang', 'telur', 'susu', 'ikan', 'ayam', 'gluten', 'kedelai']
   const [formSupplier, setFormSupplier] = useState({ nama: '', kontak: '' })
   const [deleting, setDeleting] = useState(null)
   const [deleteType, setDeleteType] = useState('bahan')
@@ -43,14 +45,16 @@ export default function Bahan() {
   // ===== Bahan =====
   function openAddBahan() {
     setEditing(null)
-    setFormBahan({ nama: '', satuan: '', stok_minimum: 0, supplier_id: '' })
+    setFormBahan({ nama: '', satuan: '', stok_minimum: 0, supplier_id: '', alergen: [] })
+    setAlergenInput('')
     setTab('bahan')
     setModalOpen(true)
   }
 
   function openEditBahan(row) {
     setEditing(row)
-    setFormBahan({ nama: row.nama, satuan: row.satuan, stok_minimum: row.stok_minimum, supplier_id: row.supplier_id ?? '' })
+    setFormBahan({ nama: row.nama, satuan: row.satuan, stok_minimum: row.stok_minimum, supplier_id: row.supplier_id ?? '', alergen: row.alergen ?? [] })
+    setAlergenInput('')
     setTab('bahan')
     setModalOpen(true)
   }
@@ -63,6 +67,7 @@ export default function Bahan() {
         nama: formBahan.nama, satuan: formBahan.satuan,
         stok_minimum: Number(formBahan.stok_minimum),
         supplier_id: formBahan.supplier_id ? Number(formBahan.supplier_id) : null,
+        alergen: formBahan.alergen,
       }
       if (editing) await updateBahan(editing.id, payload)
       else await createBahan(payload)
@@ -123,6 +128,11 @@ export default function Bahan() {
     { key: 'satuan', label: 'Satuan' },
     { key: 'stok_minimum', label: 'Stok Min.' },
     { key: 'supplier', label: 'Supplier', render: r => r.supplier?.nama ?? '-' },
+    { key: 'alergen', label: 'Alergen', render: r =>
+      (r.alergen?.length > 0)
+        ? <span className="flex flex-wrap gap-1">{r.alergen.map(a => <span key={a} className="bg-red-100 text-red-700 text-xs px-1.5 py-0.5 rounded">{a}</span>)}</span>
+        : <span className="text-gray-400">-</span>
+    },
   ]
   const colSupplier = [
     { key: 'nama', label: 'Nama Supplier' },
@@ -187,6 +197,37 @@ export default function Bahan() {
               <option value="">Tanpa supplier</option>
               {supplierData.map(s => <option key={s.id} value={s.id}>{s.nama}</option>)}
             </select>
+          </FormField>
+          <FormField label="Alergen">
+            <div className="flex flex-wrap gap-1 mb-1">
+              {formBahan.alergen.map(a => (
+                <span key={a} className="flex items-center gap-1 bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">
+                  {a}
+                  <button type="button" onClick={() => setFormBahan(f => ({ ...f, alergen: f.alergen.filter(x => x !== a) }))} className="hover:text-red-900">×</button>
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                list="saran-alergen-bahan"
+                value={alergenInput}
+                onChange={e => setAlergenInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    const val = alergenInput.trim().toLowerCase()
+                    if (val && !formBahan.alergen.includes(val)) setFormBahan(f => ({ ...f, alergen: [...f.alergen, val] }))
+                    setAlergenInput('')
+                  }
+                }}
+                placeholder="Ketik lalu Enter"
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              />
+              <datalist id="saran-alergen-bahan">
+                {SARAN_ALERGEN.map(s => <option key={s} value={s} />)}
+              </datalist>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">Saran: {SARAN_ALERGEN.join(', ')}</p>
           </FormField>
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="secondary" type="button" onClick={() => setModalOpen(false)}>Batal</Button>

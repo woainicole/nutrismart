@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
+import { NotifikasiProvider } from './context/NotifikasiContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/layout/AppLayout'
 
@@ -22,49 +23,59 @@ import Laporan from './pages/Laporan'
 import Grafik from './pages/Grafik'
 import Pengaturan from './pages/Pengaturan'
 import Profil from './pages/Profil'
+import RiwayatMakan from './pages/RiwayatMakan'
+import Notifikasi from './pages/Notifikasi'
+import LogAktivitas from './pages/LogAktivitas'
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-        <Routes>
-          <Route path="/login" element={<Login />} />
+        <NotifikasiProvider>
+          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+          <Routes>
+            <Route path="/login" element={<Login />} />
 
-          {/* Semua halaman dalam layout + auth check */}
-          <Route element={
-            <ProtectedRoute>
-              <AppLayout />
-            </ProtectedRoute>
-          }>
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Semua halaman dalam layout + auth check */}
+            <Route element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }>
+              <Route path="/dashboard" element={<Dashboard />} />
 
-            {/* Master data */}
-            <Route path="/bangsal" element={<ProtectedRoute allow={['admin']}><Bangsal /></ProtectedRoute>} />
-            <Route path="/diet" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><JenisDiet /></ProtectedRoute>} />
-            <Route path="/pasien" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><Pasien /></ProtectedRoute>} />
-            <Route path="/menu" element={<ProtectedRoute allow={['admin','ahli_gizi','koki']}><Menu /></ProtectedRoute>} />
-            <Route path="/bahan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Bahan /></ProtectedRoute>} />
+              {/* Master data */}
+              <Route path="/bangsal" element={<ProtectedRoute allow={['admin']}><Bangsal /></ProtectedRoute>} />
+              <Route path="/diet" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><JenisDiet /></ProtectedRoute>} />
+              <Route path="/pasien" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><Pasien /></ProtectedRoute>} />
+              <Route path="/menu" element={<ProtectedRoute allow={['admin','ahli_gizi','koki']}><Menu /></ProtectedRoute>} />
+              <Route path="/bahan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Bahan /></ProtectedRoute>} />
 
-            {/* Operasional */}
-            <Route path="/stok" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Stok /></ProtectedRoute>} />
-            <Route path="/menu-harian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki']}><MenuHarian /></ProtectedRoute>} />
-            <Route path="/pesanan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><PesananMakan /></ProtectedRoute>} />
-            <Route path="/pengajuan-diet" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><PengajuanDiet /></ProtectedRoute>} />
-            <Route path="/pengajuan-pembelian" element={<ProtectedRoute allow={['admin','koki','gudang']}><PengajuanPembelian /></ProtectedRoute>} />
-            <Route path="/pengembalian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><Pengembalian /></ProtectedRoute>} />
+              {/* Operasional */}
+              <Route path="/stok" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Stok /></ProtectedRoute>} />
+              <Route path="/menu-harian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki']}><MenuHarian /></ProtectedRoute>} />
+              <Route path="/pesanan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><PesananMakan /></ProtectedRoute>} />
+              <Route path="/pengajuan-diet" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><PengajuanDiet /></ProtectedRoute>} />
+              <Route path="/pengajuan-pembelian" element={<ProtectedRoute allow={['admin','koki','gudang']}><PengajuanPembelian /></ProtectedRoute>} />
+              <Route path="/pengembalian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><Pengembalian /></ProtectedRoute>} />
+              <Route path="/riwayat-makan" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><RiwayatMakan /></ProtectedRoute>} />
 
-            {/* Laporan & grafik */}
-            <Route path="/laporan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Laporan /></ProtectedRoute>} />
-            <Route path="/grafik" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Grafik /></ProtectedRoute>} />
+              {/* Laporan & grafik */}
+              <Route path="/laporan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Laporan /></ProtectedRoute>} />
+              <Route path="/grafik" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Grafik /></ProtectedRoute>} />
 
-            {/* Admin */}
-            <Route path="/pengaturan" element={<ProtectedRoute allow={['admin']}><Pengaturan /></ProtectedRoute>} />
-            <Route path="/profil" element={<Profil />} />
-          </Route>
+              {/* Notifikasi & Log */}
+              <Route path="/notifikasi" element={<Notifikasi />} />
+              <Route path="/log-aktivitas" element={<ProtectedRoute allow={['admin']}><LogAktivitas /></ProtectedRoute>} />
 
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+              {/* Admin */}
+              <Route path="/pengaturan" element={<ProtectedRoute allow={['admin']}><Pengaturan /></ProtectedRoute>} />
+              <Route path="/profil" element={<Profil />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </NotifikasiProvider>
       </AuthProvider>
     </BrowserRouter>
   )
