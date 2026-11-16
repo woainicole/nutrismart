@@ -4,6 +4,7 @@ import { getPengajuanDiet, createPengajuanDiet, setujuiDiet, batalkanPengajuanDi
 import { getPasien } from '../services/pasienService'
 import { getJenisDiet } from '../services/dietService'
 import { formatTanggal } from '../lib/format'
+import { emitDietDiperbarui } from '../services/integrasiService'
 import DataTable from '../components/ui/DataTable'
 import PageHeader from '../components/ui/PageHeader'
 import Modal from '../components/ui/Modal'
@@ -75,6 +76,23 @@ export default function PengajuanDiet() {
     try {
       await setujuiDiet(id)
       toast.success('Pengajuan disetujui — diet pasien berubah')
+
+      // Emit event diet.diperbarui ke AdmisiRS lewat ekstensi browser
+      try {
+        const pengajuan = data.find(r => r.id === id)
+        if (pengajuan?.pasien?.no_rm && pengajuan?.diet_baru?.nama) {
+          await emitDietDiperbarui(
+            pengajuan.pasien.no_rm,
+            pengajuan.diet_baru.nama,
+            pengajuan.tanggal_berlaku
+          )
+          toast('Diet dikirim ke AdmisiRS lewat ekstensi.', { icon: '🔗' })
+        }
+      } catch (eEmit) {
+        // Gagal emit tidak membatalkan persetujuan
+        console.warn('Gagal emit diet.diperbarui:', eEmit.message)
+      }
+
       await load()
     } catch (e) { toast.error(e.message) }
   }

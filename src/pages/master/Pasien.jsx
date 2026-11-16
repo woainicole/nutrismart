@@ -25,7 +25,7 @@ export default function Pasien() {
   const [filterBangsal, setFilterBangsal] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [form, setForm] = useState({ no_rm: '', nama: '', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
+  const [form, setForm] = useState({ no_rm: '', nama: '', tgl_lahir: '', jenis_kelamin: 'L', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
   const [deleting, setDeleting] = useState(null)
   const [saving, setSaving] = useState(false)
 
@@ -47,7 +47,7 @@ export default function Pasien() {
 
   function openAdd() {
     setEditing(null)
-    setForm({ no_rm: '', nama: '', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
+    setForm({ no_rm: '', nama: '', tgl_lahir: '', jenis_kelamin: 'L', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
     setModalOpen(true)
   }
 
@@ -56,6 +56,8 @@ export default function Pasien() {
     setForm({
       no_rm: row.no_rm,
       nama: row.nama,
+      tgl_lahir: row.tgl_lahir ?? '',
+      jenis_kelamin: row.jenis_kelamin ?? 'L',
       bangsal_id: row.bangsal_id ?? '',
       kamar: row.kamar ?? '',
       diagnosa: row.diagnosa ?? '',
@@ -73,6 +75,8 @@ export default function Pasien() {
       const payload = {
         no_rm: form.no_rm,
         nama: form.nama,
+        tgl_lahir: form.tgl_lahir || null,
+        jenis_kelamin: form.jenis_kelamin || null,
         bangsal_id: form.bangsal_id ? Number(form.bangsal_id) : null,
         kamar: form.kamar || null,
         diagnosa: form.diagnosa || null,
@@ -103,6 +107,8 @@ export default function Pasien() {
   const columns = [
     { key: 'no_rm', label: 'No RM' },
     { key: 'nama', label: 'Nama' },
+    { key: 'tgl_lahir', label: 'Tgl Lahir', render: r => r.tgl_lahir ? formatTanggal(r.tgl_lahir) : '-' },
+    { key: 'jenis_kelamin', label: 'JK', render: r => r.jenis_kelamin ?? '-' },
     { key: 'bangsal', label: 'Bangsal', render: r => r.bangsal?.nama ?? '-' },
     { key: 'kamar', label: 'Kamar', render: r => r.kamar ?? '-' },
     { key: 'alergi', label: 'Alergi', render: r => (r.alergi?.length > 0
@@ -141,6 +147,17 @@ export default function Pasien() {
             </FormField>
             <FormField label="Nama" required>
               <input value={form.nama} onChange={e => setForm(f => ({ ...f, nama: e.target.value }))} required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+            </FormField>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField label="Tanggal Lahir">
+              <input type="date" value={form.tgl_lahir} onChange={e => setForm(f => ({ ...f, tgl_lahir: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+            </FormField>
+            <FormField label="Jenis Kelamin">
+              <select value={form.jenis_kelamin} onChange={e => setForm(f => ({ ...f, jenis_kelamin: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
             </FormField>
           </div>
           <div className="grid grid-cols-2 gap-4">

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
 import { NotifikasiProvider } from './context/NotifikasiContext'
+import { IntegrasiProvider } from './context/IntegrasiContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/layout/AppLayout'
 
@@ -17,6 +18,7 @@ import Stok from './pages/Stok'
 import MenuHarian from './pages/MenuHarian'
 import PesananMakan from './pages/PesananMakan'
 import PengajuanDiet from './pages/PengajuanDiet'
+import JadwalOperasi from './pages/JadwalOperasi'
 import PengajuanPembelian from './pages/PengajuanPembelian'
 import Pengembalian from './pages/Pengembalian'
 import Laporan from './pages/Laporan'
@@ -32,8 +34,9 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <NotifikasiProvider>
-          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-          <Routes>
+          <IntegrasiProvider>
+            <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+            <Routes>
             <Route path="/login" element={<Login />} />
 
             {/* Semua halaman dalam layout + auth check */}
@@ -56,6 +59,7 @@ function App() {
               <Route path="/menu-harian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki']}><MenuHarian /></ProtectedRoute>} />
               <Route path="/pesanan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><PesananMakan /></ProtectedRoute>} />
               <Route path="/pengajuan-diet" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><PengajuanDiet /></ProtectedRoute>} />
+              <Route path="/jadwal-operasi" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><JadwalOperasi /></ProtectedRoute>} />
               <Route path="/pengajuan-pembelian" element={<ProtectedRoute allow={['admin','koki','gudang']}><PengajuanPembelian /></ProtectedRoute>} />
               <Route path="/pengembalian" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','perawat']}><Pengembalian /></ProtectedRoute>} />
               <Route path="/riwayat-makan" element={<ProtectedRoute allow={['admin','ahli_gizi','perawat']}><RiwayatMakan /></ProtectedRoute>} />
@@ -75,6 +79,7 @@ function App() {
 
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
+          </IntegrasiProvider>
         </NotifikasiProvider>
       </AuthProvider>
     </BrowserRouter>

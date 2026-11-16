@@ -30,6 +30,7 @@ export const MENU_ITEMS = [
   { path: '/menu-harian', label: 'Menu Harian', icon: 'CalendarDays', allow: ['admin','ahli_gizi','koki'] },
   { path: '/pesanan', label: 'Pesanan Makan', icon: 'ClipboardList', allow: ['admin','ahli_gizi','koki','perawat'] },
   { path: '/pengajuan-diet', label: 'Pengajuan Diet', icon: 'FileText', allow: ['admin','ahli_gizi','perawat'] },
+  { path: '/jadwal-operasi', label: 'Jadwal Operasi', icon: 'Stethoscope', allow: ['admin','ahli_gizi','perawat'] },
   { path: '/pengajuan-pembelian', label: 'Pengajuan Pembelian', icon: 'ShoppingCart', allow: ['admin','koki','gudang'] },
   { path: '/pengembalian', label: 'Pengembalian', icon: 'RotateCcw', allow: ['admin','ahli_gizi','koki','perawat'] },
   { path: '/riwayat-makan', label: 'Riwayat Makan', icon: 'ClipboardCheck', allow: ['admin','ahli_gizi','perawat'] },

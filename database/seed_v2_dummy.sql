@@ -75,3 +75,4 @@ INSERT INTO mutasi_stok (batch_id, bahan_id, jenis, jumlah, catatan, created_by,
 (6, 4, 'koreksi', 3.0, 'Penyesuaian stok opname mingguan: 3 butir telur pecah saat pemindahan', '1b728e1d-a6aa-4c64-a8fc-09238d49d6cb'::uuid, '2026-11-08 16:00:00+07'),
 (7, 5, 'buang', 4.0, 'Pembuangan 4 pcs tahu rusak akibat penurunan suhu showcase', '1b728e1d-a6aa-4c64-a8fc-09238d49d6cb'::uuid, '2026-11-08 17:00:00+07'),
 (NULL, 11, 'masuk', 15.0, 'Pengadaan darurat susu pasteurisasi 15 liter', '1b728e1d-a6aa-4c64-a8fc-09238d49d6cb'::uuid, '2026-11-09 08:00:00+07');
+
