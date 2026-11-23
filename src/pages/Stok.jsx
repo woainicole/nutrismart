@@ -14,7 +14,7 @@ import FormField from '../components/ui/FormField'
 import PageHeader from '../components/ui/PageHeader'
 import Spinner from '../components/ui/Spinner'
 import toast from 'react-hot-toast'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 
 export default function Stok() {
   const { role } = useAuth()
@@ -64,6 +64,17 @@ export default function Stok() {
       const { error } = await supabase.from('stok_batch').update({ jumlah_sisa: 0 }).eq('id', id)
       if (error) throw error
       toast.success('Batch dibuang')
+      setLoading(true)
+      await load()
+    } catch (e) { toast.error(e.message) }
+  }
+
+  async function handleBuangSemuaKadaluwarsa() {
+    if (!confirm('Yakin buang SEMUA stok yang sudah melewati tanggal kedaluwarsa? Tindakan ini tidak bisa dibatalkan.')) return
+    try {
+      const { data, error } = await supabase.rpc('buang_batch_kadaluwarsa')
+      if (error) throw error
+      toast.success(`${data} batch kadaluwarsa berhasil dibuang`)
       setLoading(true)
       await load()
     } catch (e) { toast.error(e.message) }
@@ -169,7 +180,24 @@ export default function Stok() {
       )}
 
       {tab === 'batch' && (
-        <DataTable columns={colBatch} data={batches} loading={loading} searchKeys={['bahan.nama']} />
+        <>
+          {batches.some(b => b.tgl_kedaluwarsa < new Date().toISOString().slice(0, 10) && b.jumlah_sisa > 0) && (
+            <div className="mb-3 flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+              <span className="text-sm text-red-700 font-medium">
+                ⚠️ Ada stok yang sudah melewati tanggal kedaluwarsa
+              </span>
+              {!viewOnly && (
+                <button
+                  onClick={handleBuangSemuaKadaluwarsa}
+                  className="flex items-center gap-1.5 text-xs text-red-600 border border-red-300 bg-white hover:bg-red-50 px-3 py-1.5 rounded-lg font-medium transition-colors"
+                >
+                  Buang Semua Kadaluwarsa
+                </button>
+              )}
+            </div>
+          )}
+          <DataTable columns={colBatch} data={batches} loading={loading} searchKeys={['bahan.nama']} />
+        </>
       )}
 
       {tab === 'kebutuhan' && (

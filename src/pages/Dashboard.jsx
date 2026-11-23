@@ -55,7 +55,7 @@ export default function Dashboard() {
         supabase.from('v_stok_bahan').select('*'),
         supabase.from('v_near_expiry').select('*').order('tgl_kedaluwarsa'),
         supabase.from('v_kebutuhan_diet').select('*').eq('tanggal', today).order('waktu_makan'),
-        supabase.from('sesi_makan').select('*').eq('tanggal', today).order('waktu_makan'),
+        supabase.from('v_sesi_harian').select('*').eq('tanggal', today).order('waktu_makan'),
       ])
 
       const rendahList = (stokBahan || []).filter(b => Number(b.stok_total) < Number(b.stok_minimum))
@@ -214,6 +214,12 @@ export default function Dashboard() {
                 ))}
                 {nearExpiry.length > 4 && <li className="text-xs">...{nearExpiry.length - 4} lainnya</li>}
               </ul>
+              <button
+                onClick={() => navigate('/stok')}
+                className="mt-2 text-xs text-yellow-700 hover:underline font-medium"
+              >
+                Kelola di Stok →
+              </button>
             </div>
           )}
           {rendah.length > 0 && (
