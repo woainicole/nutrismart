@@ -6,6 +6,7 @@ import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
 import Spinner from '../components/ui/Spinner'
 import { getNotifikasi, tandaiSemuaDibaca } from '../services/notifikasiService'
+import { useNotifikasi } from '../context/NotifikasiContext'
 import { formatTanggal } from '../lib/format'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +25,7 @@ export default function Notifikasi() {
   const [loading, setLoading] = useState(true)
   const [filterBelum, setFilterBelum] = useState(false)
   const navigate = useNavigate()
+  const { refresh: refreshContext, tandaiRute } = useNotifikasi()
 
   async function load() {
     setLoading(true)
@@ -40,8 +42,17 @@ export default function Notifikasi() {
     try {
       await tandaiSemuaDibaca()
       toast.success('Semua notifikasi ditandai dibaca')
+      refreshContext()  // sync sidebar badge + bell
       load()
     } catch (e) { toast.error(e.message) }
+  }
+
+  // Klik notif: tandai rute (clear sidebar badge) lalu navigasi
+  async function handleKlikNotif(row) {
+    if (row.rute) {
+      await tandaiRute(row.rute)
+      navigate(row.rute)
+    }
   }
 
   const tampil = filterBelum ? data.filter(r => !r.dibaca_at) : data
@@ -65,7 +76,7 @@ export default function Notifikasi() {
       header: 'Aksi',
       key: row => row.rute ? (
         <button
-          onClick={() => navigate(row.rute)}
+          onClick={() => handleKlikNotif(row)}
           className="text-xs text-emerald-600 hover:underline"
         >
           Buka

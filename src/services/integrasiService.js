@@ -94,14 +94,67 @@ export async function getIntegrasiLog(filter = {}) {
 
 // ─── Emit event keluar (diet.diperbarui) ───────────────────────────────
 
+// Firebase REST API untuk update Firestore AdmisiRS langsung (seamless, tanpa ekstensi)
+const FB_PROJECT = import.meta.env.VITE_ADMISIRS_FIREBASE_PROJECT_ID
+const FB_API_KEY = import.meta.env.VITE_ADMISIRS_FIREBASE_API_KEY
+
+/**
+ * Update dietSaatIni di Firestore AdmisiRS langsung via REST API.
+ * Fallback jika gagal: tidak memblokir alur utama.
+ */
+async function updateDietAdmisiRS(noRm, jenisDiet) {
+  if (!FB_PROJECT || !FB_API_KEY) return { ok: false, pesan: 'Konfigurasi Firebase AdmisiRS belum diisi.' }
+  try {
+    // Cari dokumen pasien by noRm via query
+    const queryUrl = `https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents:runQuery?key=${FB_API_KEY}`
+    const qRes = await fetch(queryUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: 'pasien' }],
+          where: {
+            fieldFilter: {
+              field: { fieldPath: 'noRm' },
+              op: 'EQUAL',
+              value: { stringValue: noRm },
+            },
+          },
+          limit: 1,
+        },
+      }),
+    })
+    const qData = await qRes.json()
+    const doc = qData[0]?.document
+    if (!doc) return { ok: false, pesan: `Pasien ${noRm} tidak ditemukan di AdmisiRS.` }
+
+    // Patch dietSaatIni
+    const docPath = doc.name  // sudah full path
+    const patchUrl = `https://firestore.googleapis.com/v1/${docPath}?updateMask.fieldPaths=dietSaatIni&key=${FB_API_KEY}`
+    const pRes = await fetch(patchUrl, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: { dietSaatIni: { stringValue: jenisDiet } } }),
+    })
+    if (!pRes.ok) {
+      const teks = await pRes.text()
+      return { ok: false, pesan: `Firestore error: ${teks}` }
+    }
+    return { ok: true, pesan: `Diet ${noRm} diperbarui di AdmisiRS menjadi "${jenisDiet}".` }
+  } catch (e) {
+    return { ok: false, pesan: 'Gagal menghubungi Firestore AdmisiRS: ' + e.message }
+  }
+}
+
 /**
  * Setelah ahli gizi menyetujui pengajuan diet, panggil ini.
- * Memanggil RPC emit_diet_diperbarui lalu emit envelope via postMessage.
+ * Memanggil RPC emit_diet_diperbarui, update Firestore AdmisiRS langsung (seamless),
+ * dan emit envelope via postMessage (untuk ekstensi jika ada).
  *
  * @param {string} noRm - mis. 'RM001'
  * @param {string} jenisDiet - salah satu dari DIET_VALID
  * @param {string} [berlaku] - YYYY-MM-DD; default hari ini
- * @returns {object} envelope yang dikirim
+ * @returns {{ envelope: object, admisirs: { ok, pesan } }}
  */
 export async function emitDietDiperbarui(noRm, jenisDiet, berlaku) {
   const { data, error } = await supabase.rpc('emit_diet_diperbarui', {
@@ -113,13 +166,16 @@ export async function emitDietDiperbarui(noRm, jenisDiet, berlaku) {
 
   const envelope = data  // JSON envelope dari RPC
 
-  // Pancarkan ke ekstensi browser lewat postMessage
+  // Update Firestore AdmisiRS langsung (seamless)
+  const admisirs = await updateDietAdmisiRS(noRm, jenisDiet)
+
+  // Juga emit postMessage agar ekstensi (jika ada) tetap bisa menangkap
   window.postMessage(
     { channel: CHANNEL, tipe: 'EVENT_KELUAR', event: envelope },
     window.location.origin
   )
 
-  return envelope
+  return { envelope, admisirs }
 }
 
 // ─── Listener postMessage (dipasang di IntegrasiContext) ────────────────

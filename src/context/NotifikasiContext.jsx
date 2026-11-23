@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from './AuthContext'
 import { getNotifikasi, getJumlahBelumDibaca, tandaiDibacaRute } from '../services/notifikasiService'
@@ -11,6 +11,10 @@ export function NotifikasiProvider({ children }) {
   const [notifs, setNotifs] = useState([])
   const [totalBelumDibaca, setTotalBelumDibaca] = useState(0)
   const [perRute, setPerRute] = useState({})
+
+  // Ref agar tandaiRute selalu pakai nilai perRute terbaru tanpa restart effect
+  const perRuteRef = useRef({})
+  perRuteRef.current = perRute
 
   const hitungPerRute = useCallback((rows) => {
     const acc = {}
@@ -40,7 +44,7 @@ export function NotifikasiProvider({ children }) {
     if (session?.user) refresh()
   }, [session, refresh])
 
-  // Supabase Realtime subscribe
+  // Supabase Realtime subscribe — INSERT saja (UPDATE ditangani optimistis di tandaiRute)
   useEffect(() => {
     if (!session?.user) return
 
@@ -75,15 +79,22 @@ export function NotifikasiProvider({ children }) {
     }
   }, [session, refresh])
 
+  // Optimistic: hapus badge langsung, baru update DB
   async function tandaiRute(rute) {
+    const jumlah = perRuteRef.current[rute] || 0
+    if (!jumlah) return  // sudah dibaca, skip network call
+
+    // Hapus badge seketika
+    setPerRute(prev => { const next = { ...prev }; delete next[rute]; return next })
+    setTotalBelumDibaca(n => Math.max(0, n - jumlah))
+    setNotifs(prev => prev.map(n => n.rute === rute ? { ...n, dibaca_at: new Date().toISOString() } : n))
+
     try {
       await tandaiDibacaRute(rute)
-      setNotifs(prev => prev.map(n => n.rute === rute ? { ...n, dibaca_at: new Date().toISOString() } : n))
-      setPerRute(prev => { const next = { ...prev }; delete next[rute]; return next })
-      const count = await getJumlahBelumDibaca()
-      setTotalBelumDibaca(count)
     } catch (e) {
       console.error('Gagal tandai dibaca:', e.message)
+      // Rollback jika DB gagal
+      refresh()
     }
   }
 
@@ -99,4 +110,3 @@ export function useNotifikasi() {
   if (!ctx) throw new Error('useNotifikasi harus di dalam NotifikasiProvider')
   return ctx
 }
-

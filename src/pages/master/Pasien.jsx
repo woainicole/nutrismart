@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { isViewOnly } from '../../lib/roles'
-import { getPasien, createPasien, updatePasien, deletePasien } from '../../services/pasienService'
+import { getPasien, createPasien, updatePasien, deletePasien, getNextNoRm, getKamarKosong } from '../../services/pasienService'
 import { getBangsal, getJenisDiet } from '../../services/dietService'
 import { formatTanggal } from '../../lib/format'
 import DataTable from '../../components/ui/DataTable'
@@ -21,6 +21,7 @@ export default function Pasien() {
   const [data, setData] = useState([])
   const [bangsalList, setBangsalList] = useState([])
   const [dietList, setDietList] = useState([])
+  const [kamarList, setKamarList] = useState([])
   const [loading, setLoading] = useState(true)
   const [filterBangsal, setFilterBangsal] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
@@ -45,9 +46,11 @@ export default function Pasien() {
     finally { setLoading(false) }
   }
 
-  function openAdd() {
+  async function openAdd() {
     setEditing(null)
-    setForm({ no_rm: '', nama: '', tgl_lahir: '', jenis_kelamin: 'L', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
+    const nextRm = await getNextNoRm().catch(() => '')
+    setForm({ no_rm: nextRm, nama: '', tgl_lahir: '', jenis_kelamin: 'L', bangsal_id: '', kamar: '', diagnosa: '', alergi: '', jenis_diet_id: '', status: 'aktif' })
+    setKamarList([])
     setModalOpen(true)
   }
 
@@ -65,7 +68,18 @@ export default function Pasien() {
       jenis_diet_id: row.jenis_diet_id ?? '',
       status: row.status,
     })
+    // Muat kamar kosong sesuai bangsal pasien saat ini
+    const bangsalNama = bangsalList.find(b => b.id === row.bangsal_id)?.nama || ''
+    getKamarKosong(bangsalNama).then(setKamarList).catch(() => setKamarList([]))
     setModalOpen(true)
+  }
+
+  // Saat bangsal berubah di form, muat ulang daftar kamar kosong
+  async function handleBangsalChange(bangsalId) {
+    setForm(f => ({ ...f, bangsal_id: bangsalId, kamar: '' }))
+    const bangsalNama = bangsalList.find(b => String(b.id) === String(bangsalId))?.nama || ''
+    const kamar = await getKamarKosong(bangsalNama).catch(() => [])
+    setKamarList(kamar)
   }
 
   async function handleSubmit(e) {
@@ -143,7 +157,14 @@ export default function Pasien() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <FormField label="No Rekam Medis" required>
-              <input value={form.no_rm} onChange={e => setForm(f => ({ ...f, no_rm: e.target.value }))} required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              <input
+                value={form.no_rm}
+                onChange={e => setForm(f => ({ ...f, no_rm: e.target.value }))}
+                required
+                readOnly={!editing}
+                className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm ${!editing ? 'bg-gray-50 text-gray-500 cursor-default' : ''}`}
+              />
+              {!editing && <p className="text-xs text-gray-400 mt-1">Digenerate otomatis</p>}
             </FormField>
             <FormField label="Nama" required>
               <input value={form.nama} onChange={e => setForm(f => ({ ...f, nama: e.target.value }))} required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
@@ -162,13 +183,20 @@ export default function Pasien() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <FormField label="Bangsal">
-              <select value={form.bangsal_id} onChange={e => setForm(f => ({ ...f, bangsal_id: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <select value={form.bangsal_id} onChange={e => handleBangsalChange(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
                 <option value="">Pilih bangsal</option>
                 {bangsalList.map(b => <option key={b.id} value={b.id}>{b.nama}</option>)}
               </select>
             </FormField>
             <FormField label="Kamar">
-              <input value={form.kamar} onChange={e => setForm(f => ({ ...f, kamar: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              {kamarList.length > 0 ? (
+                <select value={form.kamar} onChange={e => setForm(f => ({ ...f, kamar: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                  <option value="">Pilih kamar</option>
+                  {kamarList.map(k => <option key={k.id} value={k.nomor}>{k.bangsal} {k.nomor}</option>)}
+                </select>
+              ) : (
+                <input value={form.kamar} onChange={e => setForm(f => ({ ...f, kamar: e.target.value }))} placeholder={form.bangsal_id ? 'Tidak ada kamar kosong' : 'Pilih bangsal dulu'} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              )}
             </FormField>
           </div>
           <FormField label="Diagnosa">

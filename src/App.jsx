@@ -27,7 +27,6 @@ import Pengaturan from './pages/Pengaturan'
 import Profil from './pages/Profil'
 import RiwayatMakan from './pages/RiwayatMakan'
 import Notifikasi from './pages/Notifikasi'
-import LogAktivitas from './pages/LogAktivitas'
 
 function App() {
   return (
@@ -68,9 +67,8 @@ function App() {
               <Route path="/laporan" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Laporan /></ProtectedRoute>} />
               <Route path="/grafik" element={<ProtectedRoute allow={['admin','ahli_gizi','koki','gudang']}><Grafik /></ProtectedRoute>} />
 
-              {/* Notifikasi & Log */}
+              {/* Notifikasi */}
               <Route path="/notifikasi" element={<Notifikasi />} />
-              <Route path="/log-aktivitas" element={<ProtectedRoute allow={['admin']}><LogAktivitas /></ProtectedRoute>} />
 
               {/* Admin */}
               <Route path="/pengaturan" element={<ProtectedRoute allow={['admin']}><Pengaturan /></ProtectedRoute>} />

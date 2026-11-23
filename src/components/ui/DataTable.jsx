@@ -13,6 +13,7 @@ export default function DataTable({
   columns, data, loading, searchKeys = [], actions, emptyMessage,
   pageSize = 10,
   pageSizeOptions = [10, 25, 50],
+  rowClassName,
 }) {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
@@ -116,7 +117,13 @@ export default function DataTable({
               </tr>
             ) : (
               paged.map((row, i) => (
-                <tr key={row.id ?? i} className="border-b border-gray-50 hover:bg-gray-50/50">
+                <tr
+                  key={row.id ?? i}
+                  className={[
+                    'border-b border-gray-50 hover:bg-gray-50/50',
+                    rowClassName ? rowClassName(row) : '',
+                  ].join(' ').trim()}
+                >
                   {columns.map(col => (
                     <td key={col.key} className="px-4 py-3 text-gray-700">
                       {col.render ? col.render(row) : row[col.key]}

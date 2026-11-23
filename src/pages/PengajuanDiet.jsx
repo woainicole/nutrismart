@@ -77,16 +77,17 @@ export default function PengajuanDiet() {
       await setujuiDiet(id)
       toast.success('Pengajuan disetujui — diet pasien berubah')
 
-      // Emit event diet.diperbarui ke AdmisiRS lewat ekstensi browser
+      // Emit event diet.diperbarui ke AdmisiRS (seamless + ekstensi sebagai fallback)
       try {
         const pengajuan = data.find(r => r.id === id)
         if (pengajuan?.pasien?.no_rm && pengajuan?.diet_baru?.nama) {
-          await emitDietDiperbarui(
+          const { admisirs } = await emitDietDiperbarui(
             pengajuan.pasien.no_rm,
             pengajuan.diet_baru.nama,
             pengajuan.tanggal_berlaku
           )
-          toast('Diet dikirim ke AdmisiRS lewat ekstensi.', { icon: '🔗' })
+          if (admisirs?.ok) toast('Diet dikirim langsung ke AdmisiRS ✓', { icon: '🔗' })
+          else toast(`Diet diproses — AdmisiRS: ${admisirs?.pesan}`, { icon: '⚠️' })
         }
       } catch (eEmit) {
         // Gagal emit tidak membatalkan persetujuan

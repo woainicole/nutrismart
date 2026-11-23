@@ -37,7 +37,6 @@ export const MENU_ITEMS = [
   { path: '/laporan', label: 'Laporan', icon: 'FileBarChart', allow: ['admin','ahli_gizi','koki','gudang'] },
   { path: '/grafik', label: 'Grafik', icon: 'BarChart3', allow: ['admin','ahli_gizi','koki','gudang'] },
   { path: '/notifikasi', label: 'Notifikasi', icon: 'Bell', allow: ['admin','ahli_gizi','koki','perawat','gudang'] },
-  { path: '/log-aktivitas', label: 'Log Aktivitas', icon: 'Activity', allow: ['admin'] },
   { path: '/pengaturan', label: 'Pengaturan', icon: 'Settings', allow: ['admin'] },
   { path: '/profil', label: 'Profil', icon: 'UserCircle', allow: ['admin','ahli_gizi','koki','perawat','gudang'] },
 ]

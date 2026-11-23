@@ -16,7 +16,8 @@ export default function Sidebar({ open, onClose }) {
     if (perRute[location.pathname]) {
       tandaiRute(location.pathname)
     }
-  }, [location.pathname])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname])  // perRute sengaja tidak masuk deps: tandaiRute pakai ref internal
 
   return (
     <>

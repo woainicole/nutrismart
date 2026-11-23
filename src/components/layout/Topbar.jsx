@@ -3,12 +3,12 @@ import { Menu, LogOut, Bell } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useNotifikasi } from '../../context/NotifikasiContext'
 import { useNavigate } from 'react-router-dom'
-import { tandaiDibaca } from '../../services/notifikasiService'
+import { tandaiDibaca, tandaiSemuaDibaca } from '../../services/notifikasiService'
 import toast from 'react-hot-toast'
 
 export default function Topbar({ onToggleSidebar }) {
   const { signOut, profile } = useAuth()
-  const { notifs, totalBelumDibaca, refresh } = useNotifikasi()
+  const { notifs, totalBelumDibaca, refresh, tandaiRute } = useNotifikasi()
   const navigate = useNavigate()
   const [openBell, setOpenBell] = useState(false)
   const bellRef = useRef(null)
@@ -29,20 +29,22 @@ export default function Topbar({ onToggleSidebar }) {
   }
 
   async function handleClickNotif(n) {
-    if (!n.dibaca_at) {
+    setOpenBell(false)
+    if (n.rute) {
+      // tandaiRute handles optimistic update + DB in one call, clears sidebar badge too
+      await tandaiRute(n.rute)
+      navigate(n.rute)
+    } else if (!n.dibaca_at) {
       await tandaiDibaca([n.id])
       refresh()
     }
-    setOpenBell(false)
-    if (n.rute) navigate(n.rute)
   }
 
   async function handleTandaiSemua() {
-    const ids = notifs.filter(n => !n.dibaca_at).map(n => n.id)
-    if (ids.length) {
-      await tandaiDibaca(ids)
+    try {
+      await tandaiSemuaDibaca()
       refresh()
-    }
+    } catch (e) { toast.error(e.message) }
   }
 
   const badge = totalBelumDibaca > 99 ? '99+' : totalBelumDibaca

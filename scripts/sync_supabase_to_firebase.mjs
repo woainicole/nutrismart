@@ -160,16 +160,17 @@ function kamarFirestoreKeSupabase(k) {
 
 function operasiFirestoreKeSupabase(o) {
   return {
-    firebase_id:  o._id,
-    no_rm:        o.noRm || '',
-    nama_pasien:  o.namaPasien || '',
-    tindakan:     o.tindakan || '',
-    tanggal:      o.tanggal || new Date().toISOString().slice(0,10),
-    jam:          o.jam || '00:00',
-    dokter:       o.dokter || '',
-    status:       ['terjadwal','selesai','batal'].includes(o.status) ? o.status : 'terjadwal',
-    catatan:      o.catatan || '',
-    sync_at:      new Date().toISOString(),
+    firebase_id:   o._id,
+    no_rm:         o.noRm || '',
+    nama_pasien:   o.namaPasien || '',
+    tindakan:      o.tindakan || '',
+    tanggal:       o.tanggal || new Date().toISOString().slice(0,10),
+    jam:           o.jam || '00:00',
+    dokter:        o.dokter || '',
+    ruang_operasi: o.ruangOperasi || '',
+    status:        ['terjadwal','selesai','batal'].includes(o.status) ? o.status : 'terjadwal',
+    catatan:       o.catatan || '',
+    sync_at:       new Date().toISOString(),
   }
 }
 
