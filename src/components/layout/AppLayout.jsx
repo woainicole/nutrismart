@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
+import AppSwitcher from '../ui/AppSwitcher'
 
 export default function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -17,6 +18,9 @@ export default function AppLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Floating switcher — jendela ke AdmisiRS */}
+      <AppSwitcher />
     </div>
   )
 }
